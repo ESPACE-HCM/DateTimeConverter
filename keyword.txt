@@ -1,9 +1,0 @@
-Espace	KEYWORD1
-Date	KEYWORD1
-LunarConverter	KEYWORD1
-DayInWeek   KEYWORD2
-DayInMonth  KEYWORD2
-Month   KEYWORD2
-Year    KEYWORD2
-IsLeafMonth KEYWORD2
-IsLeafYear  KEYWORD2
