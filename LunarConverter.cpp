@@ -88,7 +88,7 @@ Date LunarConverter::Convert(Date date)
 	lY: lunar year
 	aM: number days in each lunar month
 	*/
-	uint8_t roottime = 16;
+	uint16_t roottime = (ROOTYEAR - 2000);
 	bool CNN = true;
 	//Date Start;
 	uint8_t byte1, byte2, byte3;
