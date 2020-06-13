@@ -79,56 +79,47 @@ uint8_t LunarConverter::GetMaxDay(uint8_t lunarMonth, uint8_t byte1, uint8_t byt
 
 Date LunarConverter::Convert(Date date)
 {
-	uint8_t sD, sM, lD, lM, lY, aM;
-	/*
-	sD: start day
-	sM: start Month
-	lD: lunar Date
-	lM: Lunar Month
-	lY: lunar year
-	aM: number days in each lunar month
-	*/
-	uint16_t roottime = (ROOTYEAR - 2000);
-	bool CNN = true;
-	//Date Start;
+	uint8_t startDate, startMonth, lunarDate, lunarMonth, aM;
+    uint16_t lunarYear;
+	bool isLeapMonthChecked = true;
 	uint8_t byte1, byte2, byte3;
-	if (date.Year < roottime)
+	if (date.Year < ROOTYEAR)
 		return Date(date.DayInMonth, date.Month, date.Year);
 	// Get Lut 3 bytes
-	byte1 = LUT2K16[(date.Year - roottime) * 3];
-	byte2 = LUT2K16[(date.Year - roottime) * 3 + 1];
-	byte3 = LUT2K16[(date.Year - roottime) * 3 + 2];
-	lY = date.Year;
+	byte1 = LUT2K[(date.Year - ROOTYEAR) * 3];
+	byte2 = LUT2K[(date.Year - ROOTYEAR) * 3 + 1];
+	byte3 = LUT2K[(date.Year - ROOTYEAR) * 3 + 2];
+	lunarYear = date.Year;
 	//Get Start Day Start Month
-	sD = byte1 >> 3;
+	startDate = byte1 >> 3;
 	if ((byte1 & 0x04) == 0)
-		sM = 1;
+		startMonth = 1;
 	else
-		sM = 2;
-	Date cmpDate(sD, sM, date.Year);
+		startMonth = 2;
+	Date cmpDate(startDate, startMonth, date.Year);
 	Date currentDate(date.DayInMonth, date.Month, date.Year);
-	//Get LUT for previous year if this Start Day < Current Day
+	//Get LUT for previous year if this Start Day > Current Day
 	if (currentDate < cmpDate)
 	{
 		if (date.Year < 17)
 			return Date(date.DayInMonth, date.Month, date.Year);
-		byte1 = LUT2K16[(date.Year - roottime) * 3 - 3];
-		byte2 = LUT2K16[(date.Year - roottime) * 3 - 2];
-		byte3 = LUT2K16[(date.Year - roottime) * 3 - 1];
-		lY = date.Year - 1;
-		sD = byte1 >> 3;
+		byte1 = LUT2K[(date.Year - ROOTYEAR) * 3 - 3];
+		byte2 = LUT2K[(date.Year - ROOTYEAR) * 3 - 2];
+		byte3 = LUT2K[(date.Year - ROOTYEAR) * 3 - 1];
+		lunarYear = date.Year - 1;
+		startDate = byte1 >> 3;
 		if ((byte1 & 0x04) == 0)
-			sM = 1;
+			startMonth = 1;
 		else
-			sM = 2;
+			startMonth = 2;
 	}
-	CNN = (byte2 >> 4 != 0); 
-	cmpDate.DayInMonth = sD;
-	cmpDate.Month = sM;
-	cmpDate.Year = lY;
-	lM = 1;
-	aM = GetMaxDay(lM, byte1, byte2, byte3);
-	bool isLeafMonth = false;
+
+	isLeapMonthChecked = false; 
+	cmpDate.DayInMonth = startDate;
+	cmpDate.Month = startMonth;
+	cmpDate.Year = lunarYear;
+	lunarMonth = 1;
+	aM = GetMaxDay(lunarMonth, byte1, byte2, byte3);
 	for (uint8_t i = 0; i < 13; i++)
 	{
 		Date TempDate = cmpDate + aM;
@@ -138,30 +129,32 @@ Date LunarConverter::Convert(Date date)
 		}
 		else
 		{
-			if (lM == (byte2 >> 4) && CNN)
+			if (lunarMonth == (byte2 >> 4) && !isLeapMonthChecked)
 			{
-				CNN = false;
+				isLeapMonthChecked = true;
 				aM = GetMaxDay(13, byte1, byte2, byte3);
-				isLeafMonth = true;
 			}
 			else
 			{
-				lM++;
-				aM = GetMaxDay(lM, byte1, byte2, byte3);
+				lunarMonth++;
+				aM = GetMaxDay(lunarMonth, byte1, byte2, byte3);
 			}
 			cmpDate.DayInMonth = TempDate.DayInMonth;
 			cmpDate.Month = TempDate.Month;
 			cmpDate.Year = TempDate.Year;
 		}
 	}
+
 	if (cmpDate.Month == date.Month)
 	{
-		lD = date.DayInMonth - cmpDate.DayInMonth + 1;
+		lunarDate = date.DayInMonth - cmpDate.DayInMonth + 1;
 	}
 	else
 	{
-		lD = date.DayInMonth + cmpDate.GetNumberOfDaysInMonth() - cmpDate.DayInMonth + 1;
+		lunarDate = date.DayInMonth + cmpDate.GetNumberOfDaysInMonth() - cmpDate.DayInMonth + 1;
 	}
-	return Date(lD, lM, date.Year);
+	Date lunarDay (lunarDate, lunarMonth, date.Year);
+    lunarDay.IsLeafMonth = (lunarMonth == (byte2 >> 4) && isLeapMonthChecked);
+    return lunarDay;
 }
 }

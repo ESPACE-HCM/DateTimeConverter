@@ -16,9 +16,7 @@
 // THIS SOURCE CIDE IS USED FOR STUDY PURPOSE ONLY.
 
 */
-#if defined(ARDUINO) && ARDUINO >= 100
-#include "Arduino.h"
-#endif
+#include <Arduino.h>
 #ifndef Date_h
 #define Date_h
 namespace Espace
