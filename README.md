@@ -15,7 +15,7 @@ thang bat dau 1/1 AL :  0             Thang 1
 So ngay trong thang  :  0             29 ngay
                         1             30 ngay
 ```
-Mốc là năm 2016:
+Mốc là năm 2010:
 ## Sơ đồ thuật toán
 
 1. Nếu ngày dương lịch nhỏ hơn ngày gốc -> trả về ngày hiện tại
