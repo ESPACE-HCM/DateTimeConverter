@@ -1,0 +1,28 @@
+{
+    "name": "Vietnamese Lunar DateTime Converter",
+    "keywords": "date, DateTime, Lunar, Calendar, am lich, viet name",
+    "description": "Chuyển đổi ngày tháng năm dương lịch sang âm Lịch việt nam sử dụng look-up-table với 3 byte/năm. Sử dụng cho thư viện arduino",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/ESPACE-HCM/DateTimeConverter.git"
+    },
+    "authors":
+    [
+      {
+        "name": "ESpace",
+        "email": "espace@google.com",
+        "url": "espace.edu.vn",
+        "maintainer": true
+      },
+      {
+        "name": "Evil Artist",
+        "email": "loc.nguyenxuan99@outlook.com"
+      }
+    ],
+    "dependencies": [
+    ],
+    "version": "2.0.1",
+    "frameworks": "arduino",
+    "platforms": "*"
+}
