@@ -12,12 +12,13 @@
       {
         "name": "ESpace",
         "email": "espace@google.com",
-        "url": "espace.edu.vn",
+        "url": "https://espace.edu.vn",
         "maintainer": true
       },
       {
         "name": "Evil Artist",
-        "email": "loc.nguyenxuan99@outlook.com"
+        "email": "loc.nguyenxuan99@outlook.com",
+        "maintainer": true
       }
     ],
     "dependencies": [
